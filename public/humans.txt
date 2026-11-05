@@ -1,0 +1,9 @@
+/* TEAM */
+Built by: COR Intelligence
+Site: https://corsolutions.co.uk
+Location: United Kingdom
+
+/* SITE */
+Last update: 04/11/2026
+Language: English (UK)
+Standards: HTML, CSS, WCAG 2.2 AA
