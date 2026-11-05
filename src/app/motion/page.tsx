@@ -56,9 +56,9 @@ export default function MotionPage() {
               out of step with your scrolling.
             </p>
             <p>
-              The sections below fade up as they arrive, on the same principle: each one&rsquo;s timeline is
-              its own journey into view. Browsers that do not support scroll timelines simply show
-              everything, fully visible, from the start.
+              The sections below rise into place as they arrive, on the same principle: each one&rsquo;s timeline
+              is its own journey into view. They move rather than fade, so the text never drops below its
+              contrast while you read it. Browsers without scroll timelines show everything in place.
             </p>
           </div>
         </div>

@@ -77,6 +77,17 @@ function faceName(fontFamily: string): string {
   return (match ? match[1] : first).replace(/_/g, " ");
 }
 
+// If the web font has not arrived (or failed), say so rather than name a face that is not showing.
+function fontLoaded(style: CSSStyleDeclaration): boolean {
+  const family = style.fontFamily.split(",")[0]?.trim();
+  if (!family || typeof document.fonts?.check !== "function") return true;
+  try {
+    return document.fonts.check(`${style.fontStyle} ${style.fontWeight} 16px ${family}`);
+  } catch {
+    return true;
+  }
+}
+
 const px = (value: number) => (Number.isInteger(value) ? `${value}` : value.toFixed(1));
 
 function describe(el: HTMLElement, label: string): string {
@@ -88,7 +99,10 @@ function describe(el: HTMLElement, label: string): string {
   const bg = backgroundBehind(el);
   const width = document.documentElement.clientWidth;
 
-  const parts = [`${label}: ${faceName(style.fontFamily)} at weight ${weight}`];
+  const face = fontLoaded(style)
+    ? faceName(style.fontFamily)
+    : `${faceName(style.fontFamily)} (not loaded, so a fallback is showing)`;
+  const parts = [`${label}: ${face} at weight ${weight}`];
   parts.push(
     Number.isFinite(lineHeight)
       ? `${px(size)}px on a ${px(lineHeight)}px line (${(lineHeight / size).toFixed(2)})`
@@ -137,12 +151,14 @@ export function Measure({ as: Tag = "div", label, className = "", children }: Me
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     scheme.addEventListener("change", update);
+    window.addEventListener("resize", update);
     void document.fonts?.ready.then(update);
     return () => {
       cancelAnimationFrame(frame);
       resize.disconnect();
       theme.disconnect();
       scheme.removeEventListener("change", update);
+      window.removeEventListener("resize", update);
     };
   }, [on, label]);
 

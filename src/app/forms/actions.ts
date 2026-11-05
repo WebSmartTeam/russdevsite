@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  INITIAL_STATE,
   NOTES_MAX,
   QUANTITY_MAX,
   SIZES,
@@ -15,22 +16,27 @@ import {
 
 const MAX_FIELD = 2000; // read no more than this from any field, whatever the client sends
 
+// Browsers send every line break as CRLF. Count it as one character, as the textarea's counter does.
 function field(form: FormData, name: string): string {
   const value = form.get(name);
-  return typeof value === "string" ? value.slice(0, MAX_FIELD).trim() : "";
+  return typeof value === "string" ? value.replace(/\r\n?/g, "\n").slice(0, MAX_FIELD).trim() : "";
 }
 
 // Today's date in London as YYYY-MM-DD, and the same a year on.
 function londonToday(): { today: string; yearOn: string } {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Europe/London",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date());
-  const [y, m, d] = parts.split("-").map(Number);
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/London",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+      .formatToParts(new Date())
+      .map((part) => [part.type, part.value]),
+  );
+  const [y, m, d] = [parts.year, parts.month, parts.day].map(Number);
   const yearOn = new Date(Date.UTC(y + 1, m - 1, d)).toISOString().slice(0, 10);
-  return { today: parts, yearOn };
+  return { today: `${parts.year}-${parts.month}-${parts.day}`, yearOn };
 }
 
 function isRealDate(iso: string): boolean {
@@ -46,6 +52,8 @@ function ukDate(iso: string): string {
 }
 
 export async function checkProof(previous: ProofState, form: FormData): Promise<ProofState> {
+  // A Server Action is a public endpoint and a crafted call can pass anything: refuse non-forms.
+  if (!(form instanceof FormData)) return INITIAL_STATE;
   const values: Values = {
     size: field(form, "size"),
     stock: field(form, "stock"),

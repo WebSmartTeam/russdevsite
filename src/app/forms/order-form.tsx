@@ -29,8 +29,12 @@ export function OrderForm() {
   const errors = state.status === "error" ? state.errors : {};
   const values = state.status === "error" ? state.values : undefined;
 
-  // After each answer, move focus to what changed: the error summary or the confirmation.
+  // After each new answer, move focus to what changed: the error summary or the confirmation.
+  // The ref stops it firing again when Next shows this page again after you navigate away and back.
+  const focusedAttempt = useRef(0);
   useEffect(() => {
+    if (state.attempt === focusedAttempt.current) return;
+    focusedAttempt.current = state.attempt;
     if (state.status === "error") summaryRef.current?.focus();
     if (state.status === "ok") successRef.current?.focus();
   }, [state]);

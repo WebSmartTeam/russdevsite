@@ -51,7 +51,7 @@ export function AxisPlayground() {
               <label htmlFor={`${id}-${s.axis}`} className="field-label">
                 {s.label}
               </label>
-              <output htmlFor={`${id}-${s.axis}`} className="mono-note">
+              <output htmlFor={`${id}-${s.axis}`} className="mono-note" aria-hidden="true">
                 {axes[s.axis]}
               </output>
             </div>
@@ -107,7 +107,7 @@ export function AxisPlayground() {
 
       <figure className="playground-code">
         <figcaption className="mono-note">The CSS for what you see</figcaption>
-        <pre tabIndex={0} aria-label="CSS for the sample">
+        <pre tabIndex={0} role="region" aria-label="CSS for the sample">
           <code>{css}</code>
         </pre>
       </figure>

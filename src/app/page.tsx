@@ -58,7 +58,7 @@ export default function Home() {
 
           <div className="hero-copy">
             <p className="lead">
-              Every number on this site comes from the page you are looking at. Turn on the working and it
+              The measurements on this site come from the page you are looking at. Turn on the working and it
               marks up its own type sizes and contrast as your browser measures them.
             </p>
             <p className="secondary">
@@ -139,8 +139,8 @@ export default function Home() {
           </div>
           <div className="prose">
             <p>
-              Faint red rules every eight pixels give you a spacing grid to judge the page against. Headings
-              and type samples get a dashed outline and a note underneath: which face, what size and line
+              Faint red rules every eight pixels give you a spacing grid to judge the page against. Page
+              titles and type samples get a dashed outline and a note underneath: which face, what size and line
               height, and how strongly the text contrasts with whatever is behind it.
             </p>
             <p>

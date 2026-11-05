@@ -104,7 +104,6 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    overflow-x: clip;
   }
 
   body {
@@ -115,7 +114,6 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: clip;
   }
 
   ::selection {
@@ -382,6 +380,9 @@
     background: var(--proof);
     color: var(--on-proof);
   }
+  .button-quiet[aria-pressed="true"] .mono-note {
+    color: inherit;
+  }
 
   /* Crop marks: printer's trim marks just outside each corner of a framed block.
      Sized to sit inside the 16px page gutter at phone width. */
@@ -570,7 +571,7 @@
   container: frame / inline-size;
   resize: horizontal;
   overflow: hidden;
-  min-width: 15rem;
+  min-width: min(15rem, 100%);
   max-width: 100%;
   border: 1px dashed var(--ink-3);
   padding: 1rem;
@@ -700,11 +701,9 @@
 }
 @keyframes reveal {
   from {
-    opacity: 0.15;
     translate: 0 1.5rem;
   }
   to {
-    opacity: 1;
     translate: 0 0;
   }
 }
@@ -792,6 +791,14 @@
   .button,
   .button-quiet {
     border: 1px solid ButtonText;
+  }
+  /* Selected states are shown by fill alone, which forced colours would erase. */
+  .button-quiet[aria-pressed="true"],
+  .theme-option:has(input:checked) {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
   }
 }
 

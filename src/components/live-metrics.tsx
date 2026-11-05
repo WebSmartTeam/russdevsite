@@ -108,13 +108,13 @@ export function LiveMetrics() {
 
     if (supports("layout-shift")) {
       let total = 0;
-      update({ shift: { value: "0.000", note: "How much the layout has jumped about. Under 0.1 is good." } });
+      update({ shift: { value: "0.000", note: "How much the layout has jumped about since the page opened. Lower is better." } });
       const o = new PerformanceObserver((list) => {
         for (const entry of list.getEntries() as LayoutShiftEntry[]) {
           if (!entry.hadRecentInput) total += entry.value;
         }
         update({
-          shift: { value: total.toFixed(3), note: "How much the layout has jumped about. Under 0.1 is good." },
+          shift: { value: total.toFixed(3), note: "How much the layout has jumped about since the page opened. Lower is better." },
         });
       });
       o.observe({ type: "layout-shift", buffered: true });

@@ -28,8 +28,8 @@ export function MotionPreference() {
         {reduced === null
           ? ""
           : reduced
-            ? "So the progress bar is hidden, nothing fades in as you scroll, and page changes happen instantly."
-            : "So you will see the progress bar, the gentle fade as sections arrive, and pages sliding when you move between specimens."}
+            ? "So the progress bar is hidden, nothing moves as you scroll, and page changes happen instantly."
+            : "So, where your browser supports them, you will see the progress bar, sections rising into place as they arrive, and pages sliding when you move between specimens."}
       </p>
     </div>
   );

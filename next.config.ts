@@ -20,7 +20,8 @@ const csp = [
 
 const securityHeaders = [
   { key: "Content-Security-Policy", value: csp },
-  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -35,6 +36,12 @@ const securityHeaders = [
 // ADDING A remotePatterns ENTRY RE-OPENS THAT PATH. If one is ever needed, pin BOTH hostname and
 // pathname to a host we control, never a wildcard, and check the Next.js version first.
 const nextConfig: NextConfig = {
+  experimental: {
+    // Off on purpose: on 05/11/2026 a warm build cache kept shipping the previous globals.css after
+    // it changed (reproduced by restoring that cache), and Vercel restores .next/cache between builds.
+    // A site this size builds in seconds without it.
+    turbopackFileSystemCacheForBuild: false,
+  },
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
